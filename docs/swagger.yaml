@@ -1,0 +1,322 @@
+definitions:
+  arczed_internal_entities_models.Users:
+    properties:
+      birth_day:
+        description: วันเกิด
+        type: string
+      created_at:
+        description: วันที่สร้าง
+        type: string
+      created_user:
+        description: ผู้สร้าง
+        type: string
+      deleted_at:
+        allOf:
+        - $ref: '#/definitions/gorm.DeletedAt'
+        description: วันเวลาที่ลบ
+      deleted_user:
+        description: ผุ้ลบ
+        type: string
+      id_card:
+        description: รหัสบัตรประจำตัว
+        type: string
+      is_active:
+        description: สถานะใช้งาน
+        type: integer
+      name:
+        description: ชื่อ
+        type: string
+      password:
+        description: ชื่อ โปรไฟล์
+        type: string
+      phone_number:
+        description: หมายเลขโทรศัพท์
+        type: string
+      sur_name:
+        description: นามสกุล
+        type: string
+      updated_at:
+        description: วันเวลาที่อัพเดทล่าสุด
+        type: string
+      updated_user:
+        description: ผู้อัพเดทล่าสุด
+        type: string
+      user_id:
+        description: ไอดี ของผู้ใช้งาน
+        type: string
+    type: object
+  arczed_internal_entities_schemas.AddUsers:
+    properties:
+      birth_day:
+        description: วันเกิด
+        type: string
+      email:
+        description: อีเมล
+        type: string
+      id_card:
+        description: เลขบัตรประจำตัว
+        type: string
+      name:
+        description: ชื่อ
+        type: string
+      password:
+        description: รหัสผ่าน
+        type: string
+      phone_number:
+        description: เบอร์โทร
+        type: string
+      sur_name:
+        description: นามสกุล
+        type: string
+      user_id:
+        description: ผู้ใช้งาน
+        type: string
+    type: object
+  arczed_internal_entities_schemas.HTTPError:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for user management.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: User API
+  version: "1.0"
+paths:
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Show User ตามเงื่อนไข
+      parameters:
+      - default: th
+        description: (en, th)
+        in: header
+        name: Accept-Language
+        type: string
+      - description: อีเมล
+        in: query
+        name: email
+        type: string
+      - description: ชื่อ
+        in: query
+        name: name
+        type: string
+      - description: นามสกุล
+        in: query
+        name: sur_name
+        type: string
+      - description: ผู้ใช้งาน
+        in: query
+        name: user_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/arczed_internal_entities_models.Users'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/arczed_internal_entities_schemas.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: ค้นหา User ตามเงื่อนไข
+      tags:
+      - Users
+  /api/users/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Show User ตาม UserId
+      parameters:
+      - default: th
+        description: (en, th)
+        in: header
+        name: Accept-Language
+        type: string
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/arczed_internal_entities_models.Users'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/arczed_internal_entities_schemas.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: ค้นหา User ตาม UserId
+      tags:
+      - Users
+  /api/users/createUsers:
+    post:
+      consumes:
+      - application/json
+      description: เพิ่มข้อมูล User
+      parameters:
+      - default: th
+        description: (en, th)
+        in: header
+        name: Accept-Language
+        type: string
+      - description: ' request body '
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/arczed_internal_entities_schemas.AddUsers'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/arczed_internal_entities_schemas.HTTPError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/arczed_internal_entities_schemas.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: เพิ่มข้อมูล User
+      tags:
+      - Users
+  /api/users/deleteUsers/{user_id}:
+    delete:
+      consumes:
+      - application/json
+      description: ลบข้อมูล User
+      parameters:
+      - default: th
+        description: (en, th)
+        in: header
+        name: Accept-Language
+        type: string
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/arczed_internal_entities_schemas.HTTPError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/arczed_internal_entities_schemas.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: ลบข้อมูล User
+      tags:
+      - Users
+  /api/users/updateUsers:
+    post:
+      consumes:
+      - application/json
+      description: แก้ไขข้อมูล User
+      parameters:
+      - default: th
+        description: (en, th)
+        in: header
+        name: Accept-Language
+        type: string
+      - description: ' request body '
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/arczed_internal_entities_schemas.AddUsers'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/arczed_internal_entities_schemas.HTTPError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/arczed_internal_entities_schemas.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: แก้ไขข้อมูล User
+      tags:
+      - Users
+  /api/users/usersAll:
+    get:
+      consumes:
+      - application/json
+      description: Show User ทั้งหมด
+      parameters:
+      - default: th
+        description: (en, th)
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/arczed_internal_entities_models.Users'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/arczed_internal_entities_schemas.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: ค้นหา User ทั้งหมด
+      tags:
+      - Users
+  /health:
+    get:
+      description: Health checking for the service
+      operationId: HealthCheckHandler
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health Check
+securityDefinitions:
+  ApiKeyAuth:
+    in: ใส่ค่า Bearer เว้นวรรคและตามด้วย TOKEN  ex(Bearer ?????????)
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
